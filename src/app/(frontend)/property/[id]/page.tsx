@@ -8,18 +8,8 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { ArrowLeft } from 'lucide-react'
 
-interface PropertyDetailPageProps {
-  params: {
-    id: string
-  }
-}
-
-// ✅ Define a helper type for the flexible image shape
-type PropertyImageField = {
-  image: string | string[]
-}
-
-export default async function PropertyDetailPage({ params }: PropertyDetailPageProps) {
+// ✅ Explicit params type — avoids global PageProps constraint issues
+export default async function PropertyDetailPage({ params }: { params: { id: string } }) {
   const all = await fetchProperties()
   const property = all.find((p) => p.mainId === params.id)
 
@@ -31,8 +21,10 @@ export default async function PropertyDetailPage({ params }: PropertyDetailPageP
     )
   }
 
-  // ✅ Properly typed image extraction without `any`
+  // ✅ Strongly typed image shape instead of `any`
+  type PropertyImageField = { image: string | string[] }
   const imagesField = property.images as PropertyImageField
+
   const imageArray: string[] = Array.isArray(imagesField.image)
     ? imagesField.image.slice(0, 10)
     : [imagesField.image]
@@ -41,6 +33,7 @@ export default async function PropertyDetailPage({ params }: PropertyDetailPageP
 
   return (
     <main className="min-h-screen bg-background px-4 py-8 lg:px-32">
+      {/* 🔙 Back Button */}
       <nav className="mb-8">
         <Link href="/listing">
           <Button variant="outline" className="flex items-center gap-2">
