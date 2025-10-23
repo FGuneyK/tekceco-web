@@ -8,11 +8,23 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { ArrowLeft } from 'lucide-react'
 
-export default async function PropertyDetail({ params }: { params: { id: string } }) {
+interface PropertyDetailPageProps {
+  params: {
+    id: string
+  }
+}
+
+export default async function PropertyDetailPage({ params }: PropertyDetailPageProps) {
   const all = await fetchProperties()
   const property = all.find((p) => p.mainId === params.id)
 
-  if (!property) return <p className="p-10">Property not found</p>
+  if (!property) {
+    return (
+      <main className="min-h-screen flex items-center justify-center text-muted-foreground">
+        Property not found.
+      </main>
+    )
+  }
 
   const imageArray: string[] = Array.isArray((property.images as any).image)
     ? (property.images as { image: string[] }).image.slice(0, 10)
@@ -64,7 +76,6 @@ export default async function PropertyDetail({ params }: { params: { id: string 
             <h1 className="text-3xl font-bold text-foreground mb-4">{property.title}</h1>
             <p className="text-muted-foreground mb-2">{location}</p>
 
-            {/* Variant Seçici */}
             {property.variants?.length > 0 ? (
               <PropertyVariantSelector variants={property.variants} />
             ) : (
