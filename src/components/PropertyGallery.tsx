@@ -9,6 +9,7 @@ import Image from 'next/image'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { ArrowLeft, ArrowRight } from 'lucide-react'
+import type { Swiper as SwiperType } from 'swiper' // ✅ Type import
 
 type Props = {
   images: string[]
@@ -18,7 +19,7 @@ type Props = {
 }
 
 export default function PropertyGallery({ images, mainId, ecoFriendlyName, title }: Props) {
-  const swiperRef = useRef<any>(null)
+  const swiperRef = useRef<SwiperType | null>(null) // ✅ fixed
 
   return (
     <div className="relative rounded-lg overflow-hidden shadow-lg border">
@@ -38,7 +39,7 @@ export default function PropertyGallery({ images, mainId, ecoFriendlyName, title
         ))}
       </Swiper>
 
-      {/* 🏷️ Badges */}
+      {/* Badges */}
       <div className="absolute top-3 left-3 flex flex-col gap-2 z-10">
         <Badge variant="outline" className="bg-background/80 text-foreground shadow-lg">
           {mainId}
@@ -46,7 +47,7 @@ export default function PropertyGallery({ images, mainId, ecoFriendlyName, title
         <Badge className="bg-green-600/90 text-white shadow-lg">{ecoFriendlyName}</Badge>
       </div>
 
-      {/* ⬅️➡️ Custom Nav Buttons */}
+      {/* Custom Nav Buttons */}
       <Button
         variant="default"
         size="icon"

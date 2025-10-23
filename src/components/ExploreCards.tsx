@@ -10,7 +10,7 @@ export default function ExploreCards() {
   return (
     <section className="w-full container mx-auto my-16">
       {/* Desktop Layout */}
-      <div className="hidden lg:flex gap-3 h-[32rem]">
+      <div className="hidden lg:flex gap-3 h-128">
         {/* News Card */}
         <div
           className="relative flex flex-col justify-end pb-10 pl-5 rounded-xl w-1/3 overflow-hidden group shadow-lg"
@@ -20,7 +20,7 @@ export default function ExploreCards() {
             backgroundPosition: 'center',
           }}
         >
-          <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent rounded-xl" />
+          <div className="absolute inset-0 bg-linear-to-t from-black via-transparent to-transparent rounded-xl" />
           <div className="relative z-10 text-white">
             <p className="font-bold text-2xl mb-1">Sustainability News</p>
             <p className="text-white/90">Explore the latest sustainability news from the world.</p>
@@ -62,7 +62,7 @@ export default function ExploreCards() {
               backgroundPosition: 'center',
             }}
           >
-            <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/50 to-black rounded-xl" />
+            <div className="absolute inset-0 bg-linear-to-b from-transparent via-black/50 to-black rounded-xl" />
             <div className="relative z-10 text-white">
               <p className="font-bold text-2xl mb-1">Green Future by TEKCE</p>
               <p className="text-white/90">
@@ -104,7 +104,7 @@ export default function ExploreCards() {
               backgroundPosition: 'center',
             }}
           >
-            <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/50 to-black rounded-xl" />
+            <div className="absolute inset-0 bg-linear-to-b from-transparent via-black/50 to-black rounded-xl" />
             <div className="relative z-10 text-white">
               <p className="font-bold text-2xl mb-1">Green Destinations</p>
               <p className="text-white/90">Find your next sustainable destination.</p>
@@ -145,7 +145,7 @@ export default function ExploreCards() {
             backgroundPosition: 'center',
           }}
         >
-          <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent rounded-xl" />
+          <div className="absolute inset-0 bg-linear-to-t from-black via-transparent to-transparent rounded-xl" />
           <div className="relative z-10 text-white">
             <p className="font-bold text-2xl mb-1">Eco-Friendly Properties</p>
             <p className="text-white/90">Best eco-friendly properties all over the world.</p>
@@ -181,14 +181,14 @@ export default function ExploreCards() {
       <div className="flex flex-wrap gap-2 lg:hidden mt-10">
         {/* News */}
         <div
-          className="relative flex flex-col justify-end h-[14rem] sm:h-[20rem] w-full sm:w-1/2 rounded-xl overflow-hidden group p-4 shadow-lg"
+          className="relative flex flex-col justify-end h-56 sm:h-80 w-full sm:w-1/2 rounded-xl overflow-hidden group p-4 shadow-lg"
           style={{
             backgroundImage: `url(${newsImg.src})`,
             backgroundSize: 'cover',
             backgroundPosition: 'center',
           }}
         >
-          <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent rounded-xl" />
+          <div className="absolute inset-0 bg-linear-to-t from-black via-transparent to-transparent rounded-xl" />
           <div className="relative z-10 text-white">
             <p className="font-bold text-lg">Sustainability News</p>
             <p className="text-white/90">Explore the latest sustainability news from the world.</p>
@@ -207,14 +207,14 @@ export default function ExploreCards() {
         {/* Corporate + Destinations */}
         <div className="flex flex-col gap-2 w-full sm:w-1/2">
           <div
-            className="relative flex flex-col justify-end h-[14rem] sm:h-[10rem] rounded-xl overflow-hidden group p-4 shadow-lg"
+            className="relative flex flex-col justify-end h-56 sm:h-40 rounded-xl overflow-hidden group p-4 shadow-lg"
             style={{
               backgroundImage: `url(${corporateImg.src})`,
               backgroundSize: 'cover',
               backgroundPosition: 'center',
             }}
           >
-            <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/50 to-black rounded-xl" />
+            <div className="absolute inset-0 bg-linear-to-b from-transparent via-black/50 to-black rounded-xl" />
             <div className="relative z-10 text-white">
               <p className="font-bold text-lg">Green Future by TEKCE</p>
               <p className="text-white/90">
@@ -233,14 +233,14 @@ export default function ExploreCards() {
           </div>
 
           <div
-            className="relative flex flex-col justify-end h-[14rem] sm:h-[10rem] rounded-xl overflow-hidden group p-4 shadow-lg"
+            className="relative flex flex-col justify-end h-56 sm:h-40 rounded-xl overflow-hidden group p-4 shadow-lg"
             style={{
               backgroundImage: `url(${destinationsImg.src})`,
               backgroundSize: 'cover',
               backgroundPosition: 'center',
             }}
           >
-            <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/50 to-black rounded-xl" />
+            <div className="absolute inset-0 bg-linear-to-b from-transparent via-black/50 to-black rounded-xl" />
             <div className="relative z-10 text-white">
               <p className="font-bold text-lg">Green Destinations</p>
               <p className="text-white/90">Find your next sustainable destination.</p>
@@ -259,7 +259,7 @@ export default function ExploreCards() {
 
         {/* Properties */}
         <div
-          className="relative flex flex-col justify-end h-[14rem] sm:h-[20rem] w-full sm:w-1/2 rounded-xl overflow-hidden group p-4 shadow-lg"
+          className="relative flex flex-col justify-end h-56 sm:h-80 w-full sm:w-1/2 rounded-xl overflow-hidden group p-4 shadow-lg"
           style={{
             backgroundImage: `url(${propertiesImg.src})`,
             backgroundSize: 'cover',

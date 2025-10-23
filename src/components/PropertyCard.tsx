@@ -13,11 +13,14 @@ import Link from 'next/link'
 import type { GroupedProperty } from '@/lib/fetchProperties'
 import { useRef } from 'react'
 import { cn } from '@/lib/utils'
+import type { Swiper as SwiperType } from 'swiper' // ✅ added type import
 
 type PropertyCardProps = {
   property: GroupedProperty
   className?: string
 }
+
+type ImageField = { image: string | string[] } // ✅ typed shape for images
 
 export default function PropertyCard({ property, className }: PropertyCardProps) {
   const {
@@ -36,12 +39,13 @@ export default function PropertyCard({ property, className }: PropertyCardProps)
     title,
   } = property
 
-  const swiperRef = useRef<any>(null)
+  const swiperRef = useRef<SwiperType | null>(null) // ✅ properly typed ref
 
-  // Görselleri normalize et (max 5)
-  const imageArray: string[] = Array.isArray((images as any).image)
-    ? (images as { image: string[] }).image.slice(0, 5)
-    : [(images as { image: string }).image]
+  // Normalize images (max 5)
+  const imgField = images as ImageField
+  const imageArray: string[] = Array.isArray(imgField.image)
+    ? imgField.image.slice(0, 5)
+    : [imgField.image]
 
   const location = `${district ? district + ', ' : ''}${city}, ${country}`
   const price = startingPrice ? `${startingPrice.toLocaleString()} ${currency}` : 'Price on Request'
@@ -59,7 +63,7 @@ export default function PropertyCard({ property, className }: PropertyCardProps)
           onSwiper={(swiper) => (swiperRef.current = swiper)}
           className="w-full h-full relative z-0"
         >
-          {imageArray.map((src: string, i: number) => (
+          {imageArray.map((src, i) => (
             <SwiperSlide key={i}>
               <div className="relative w-full h-full">
                 <Image
@@ -105,14 +109,14 @@ export default function PropertyCard({ property, className }: PropertyCardProps)
         </Badge>
       </div>
 
-      {/* 🧾 İçerik */}
+      {/* 🧾 Content */}
       <CardContent className="p-4">
         <h3 className="text-2xl font-bold">{price}</h3>
         <p className="text-muted-foreground">{location}</p>
         <p className="text-base text-foreground mt-1 line-clamp-2">{title}</p>
       </CardContent>
 
-      {/* 🔻 Alt Kısım */}
+      {/* 🔻 Footer */}
       <CardFooter className="flex flex-col items-start gap-4 p-4 bg-muted/50">
         <div className="flex justify-between items-center w-full">
           <Badge variant="secondary">{type}</Badge>

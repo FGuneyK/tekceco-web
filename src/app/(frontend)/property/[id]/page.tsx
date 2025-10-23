@@ -14,6 +14,11 @@ interface PropertyDetailPageProps {
   }
 }
 
+// ✅ Define a helper type for the flexible image shape
+type PropertyImageField = {
+  image: string | string[]
+}
+
 export default async function PropertyDetailPage({ params }: PropertyDetailPageProps) {
   const all = await fetchProperties()
   const property = all.find((p) => p.mainId === params.id)
@@ -26,9 +31,11 @@ export default async function PropertyDetailPage({ params }: PropertyDetailPageP
     )
   }
 
-  const imageArray: string[] = Array.isArray((property.images as any).image)
-    ? (property.images as { image: string[] }).image.slice(0, 10)
-    : [(property.images as { image: string }).image]
+  // ✅ Properly typed image extraction without `any`
+  const imagesField = property.images as PropertyImageField
+  const imageArray: string[] = Array.isArray(imagesField.image)
+    ? imagesField.image.slice(0, 10)
+    : [imagesField.image]
 
   const location = `${property.district ? property.district + ', ' : ''}${property.city}, ${property.country}`
 

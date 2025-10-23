@@ -1,7 +1,6 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { Button } from '@/components/ui/button'
 import PropertySearch from '@/components/PropertySearch'
 
 export default function Hero() {
@@ -16,11 +15,11 @@ export default function Hero() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, ease: 'easeOut' }}
           >
-            <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-700 to-blue-950 dark:to-blue-700">
+            <span className="bg-clip-text text-transparent bg-linear-to-r from-blue-700 to-blue-950 dark:to-blue-700">
               Navy
             </span>{' '}
             TEKCE quality meets sustainable{' '}
-            <span className="bg-clip-text text-transparent bg-gradient-to-r from-lime-600 to-lime-700">
+            <span className="bg-clip-text text-transparent bg-linear-to-r from-lime-600 to-lime-700">
               green
             </span>{' '}
             at <span className="text-blue-950 dark:text-white tracking-tight">TEKCE</span>
