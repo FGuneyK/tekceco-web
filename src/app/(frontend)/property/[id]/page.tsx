@@ -12,7 +12,6 @@ import { ArrowLeft } from 'lucide-react'
 export default async function PropertyDetailPage({ params }: { params: { id: string } }) {
   const all = await fetchProperties()
   const property = all.find((p) => p.mainId === params.id)
-
   if (!property) {
     return (
       <main className="min-h-screen flex items-center justify-center text-muted-foreground">

@@ -55,7 +55,7 @@
     "@types/react-dom": "19.1.6",
     "@types/xml2js": "^0.4.14",
     "@vitejs/plugin-react": "4.5.2",
-    "eslint": "^9.16.0",
+    "eslint": "^9.38.0",
     "eslint-config-next": "15.4.4",
     "jsdom": "26.1.0",
     "playwright": "1.54.1",
