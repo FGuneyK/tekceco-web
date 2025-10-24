@@ -1,3 +1,7 @@
+// Not: Bu dosya server component, 'use client' EKLEME.
+// Next.js 15 + Payload tip çakışmasını önlemek için dynamic ekliyoruz:
+export const dynamic = 'force-dynamic'
+
 import { fetchProperties } from '@/lib/fetchProperties'
 import PropertyGallery from '@/components/PropertyGallery'
 import PropertyVariantSelector from '@/components/PropertyVariantSelector'
@@ -8,10 +12,16 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { ArrowLeft } from 'lucide-react'
 
-// ✅ Explicit params type — avoids global PageProps constraint issues
-export default async function PropertyDetailPage({ params }: { params: { id: string } }) {
+// ✅ Explicit param tipi — Payload’ın global PageProps constraint’ini bypass eder
+interface PropertyPageParams {
+  id: string
+}
+
+export default async function PropertyDetailPage({ params }: { params: PropertyPageParams }) {
+  // 🏡 Verileri Payload API'den çek
   const all = await fetchProperties()
   const property = all.find((p) => p.mainId === params.id)
+
   if (!property) {
     return (
       <main className="min-h-screen flex items-center justify-center text-muted-foreground">
@@ -20,10 +30,9 @@ export default async function PropertyDetailPage({ params }: { params: { id: str
     )
   }
 
-  // ✅ Strongly typed image shape instead of `any`
+  // ✅ Tip güvenli görsel alanı
   type PropertyImageField = { image: string | string[] }
   const imagesField = property.images as PropertyImageField
-
   const imageArray: string[] = Array.isArray(imagesField.image)
     ? imagesField.image.slice(0, 10)
     : [imagesField.image]
@@ -32,7 +41,7 @@ export default async function PropertyDetailPage({ params }: { params: { id: str
 
   return (
     <main className="min-h-screen bg-background px-4 py-8 lg:px-32">
-      {/* 🔙 Back Button */}
+      {/* 🔙 Geri Dön Butonu */}
       <nav className="mb-8">
         <Link href="/listing">
           <Button variant="outline" className="flex items-center gap-2">
@@ -43,7 +52,7 @@ export default async function PropertyDetailPage({ params }: { params: { id: str
       </nav>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        {/* Left: Gallery + Details */}
+        {/* Sol: Görseller + Detaylar */}
         <div className="lg:col-span-2">
           <PropertyGallery
             images={imageArray}
@@ -111,7 +120,7 @@ export default async function PropertyDetailPage({ params }: { params: { id: str
           </Card>
         </div>
 
-        {/* Right: Contact Agent Section */}
+        {/* Sağ: İletişim Kartı */}
         <div className="lg:col-span-1">
           <div className="sticky top-20">
             <Card className="p-6 shadow-lg">
