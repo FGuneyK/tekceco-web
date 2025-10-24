@@ -3,8 +3,36 @@ import readingTime from 'reading-time'
 import slugify from 'slugify'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
 
+// === Lexical JSON'dan düz metin çıkarma fonksiyonu ===
+// JSON.stringify() KESİNLİKLE KULLANILMAZ!
+function getPlainTextFromLexical(lexicalData: any): string {
+  try {
+    if (!lexicalData) return ''
+    if (typeof lexicalData === 'string') return lexicalData
+
+    const traverse = (node: any): string => {
+      if (!node) return ''
+      if (node.text) return node.text
+      if (node.children && Array.isArray(node.children)) {
+        return node.children.map(traverse).join(' ')
+      }
+      return ''
+    }
+
+    if (lexicalData.root) {
+      return traverse(lexicalData.root)
+    }
+
+    return ''
+  } catch (err) {
+    console.error('getPlainTextFromLexical failed:', err)
+    return ''
+  }
+}
+
 export const Posts: CollectionConfig = {
   slug: 'posts',
+
   admin: {
     useAsTitle: 'title',
     defaultColumns: ['title', 'author', 'status', 'publishedAt'],
@@ -35,16 +63,6 @@ export const Posts: CollectionConfig = {
       unique: true,
       index: true,
       admin: { position: 'sidebar' },
-      hooks: {
-        beforeValidate: [
-          ({ data }) => {
-            if (data?.title && !data?.slug) {
-              data.slug = slugify(data.title, { lower: true, strict: true })
-            }
-            return data
-          },
-        ],
-      },
     },
     {
       name: 'excerpt',
@@ -79,32 +97,18 @@ export const Posts: CollectionConfig = {
     {
       name: 'content',
       type: 'richText',
+      required: true,
       editor: lexicalEditor({
         features: ({ defaultFeatures }) => [
           ...defaultFeatures,
-          // You can add or customize features here, e.g.:
-          // Custom heading levels or uploads
+          // İstersen özel Lexical node veya plugin ekleyebilirsin
         ],
       }),
-      required: true,
     },
     {
       name: 'readingTime',
       type: 'number',
       admin: { readOnly: true, position: 'sidebar' },
-      hooks: {
-        beforeChange: [
-          ({ data }) => {
-            if (data?.content) {
-              const plainText =
-                typeof data.content === 'string' ? data.content : JSON.stringify(data.content)
-              const stats = readingTime(plainText)
-              data.readingTime = Math.ceil(stats.minutes)
-            }
-            return data
-          },
-        ],
-      },
     },
     {
       name: 'publishedAt',
@@ -124,12 +128,34 @@ export const Posts: CollectionConfig = {
   ],
 
   hooks: {
-    beforeChange: [
+    beforeValidate: [
       ({ data }) => {
-        if (data.status === 'published' && !data.publishedAt) {
-          data.publishedAt = new Date().toISOString()
+        if (data?.title && !data?.slug) {
+          return {
+            ...data,
+            slug: slugify(data.title, { lower: true, strict: true }),
+          }
         }
         return data
+      },
+    ],
+    beforeChange: [
+      ({ data }) => {
+        const updatedData = { ...data }
+
+        // ✅ Lexical JSON'dan plain text çıkarıp okuma süresini hesapla
+        if (updatedData?.content) {
+          const plainText = getPlainTextFromLexical(updatedData.content)
+          const stats = readingTime(plainText)
+          updatedData.readingTime = Math.ceil(stats.minutes)
+        }
+
+        // ✅ Yayın tarihini otomatik doldur
+        if (updatedData?.status === 'published' && !updatedData?.publishedAt) {
+          updatedData.publishedAt = new Date().toISOString()
+        }
+
+        return updatedData
       },
     ],
   },

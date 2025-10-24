@@ -22,17 +22,20 @@ export const Tags: CollectionConfig = {
       type: 'text',
       unique: true,
       index: true,
-      hooks: {
-        beforeValidate: [
-          ({ data }) => {
-            if (data?.title && !data?.slug) {
-              data.slug = slugify(data.title, { lower: true, strict: true })
-            }
-            return data
-          },
-        ],
-      },
       admin: { position: 'sidebar' },
     },
   ],
+  hooks: {
+    beforeValidate: [
+      ({ data }) => {
+        if (data?.title && !data?.slug) {
+          return {
+            ...data,
+            slug: slugify(data.title, { lower: true, strict: true }),
+          }
+        }
+        return data
+      },
+    ],
+  },
 }
