@@ -1,5 +1,6 @@
 'use client'
 
+import { Suspense } from 'react'
 import { useEffect, useState } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { GroupedProperty } from '@/lib/fetchProperties'
@@ -14,7 +15,8 @@ import {
 } from '@/components/ui/select'
 import { Button } from '@/components/ui/button'
 
-export default function ListingPage() {
+// ✅ Suspense içinde çağrılacak alt bileşen
+function ListingContent() {
   const searchParams = useSearchParams()
   const [properties, setProperties] = useState<GroupedProperty[]>([])
   const [filtered, setFiltered] = useState<GroupedProperty[]>([])
@@ -26,7 +28,6 @@ export default function ListingPage() {
 
   const itemsPerPage = 6
 
-  // 🔹 İlk yüklemede query parametreleri oku
   useEffect(() => {
     const qCountry = searchParams.get('location') || 'all'
     const qCity = searchParams.get('city') || ''
@@ -36,7 +37,6 @@ export default function ListingPage() {
     setPropertyType(qType)
   }, [searchParams])
 
-  // 🔹 Property verisini yükle
   useEffect(() => {
     async function load() {
       const res = await fetch('/api/properties')
@@ -47,7 +47,6 @@ export default function ListingPage() {
     load()
   }, [])
 
-  // 🔹 Filtreleme
   useEffect(() => {
     let list = [...properties]
 
@@ -77,7 +76,6 @@ export default function ListingPage() {
     setCurrentPage(1)
   }, [country, city, propertyType, priceRange, properties])
 
-  // 🔹 Pagination hesaplama
   const startIdx = (currentPage - 1) * itemsPerPage
   const paginated = filtered.slice(startIdx, startIdx + itemsPerPage)
   const totalPages = Math.ceil(filtered.length / itemsPerPage)
@@ -86,7 +84,7 @@ export default function ListingPage() {
     <main className="min-h-screen bg-background p-10">
       <h1 className="text-3xl font-semibold mb-8 text-foreground">Eco-Friendly Properties</h1>
 
-      {/* 🔍 Filtre alanı */}
+      {/* 🔍 Filtre Alanı */}
       <div className="bg-card p-6 rounded-lg shadow-md flex flex-wrap gap-4 items-center justify-between mb-8">
         <Select onValueChange={(v) => setCountry(v)} value={country}>
           <SelectTrigger className="w-[180px]">
@@ -184,5 +182,14 @@ export default function ListingPage() {
         </div>
       )}
     </main>
+  )
+}
+
+// ✅ Ana bileşen Suspense içinde render edilir
+export default function ListingPage() {
+  return (
+    <Suspense fallback={<div className="p-10 text-muted-foreground">Loading properties...</div>}>
+      <ListingContent />
+    </Suspense>
   )
 }
