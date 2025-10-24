@@ -1,11 +1,26 @@
 import { dirname } from 'path'
 import { fileURLToPath } from 'url'
 
-// FlatCompat importunu değiştiriyoruz:
-import { FlatCompat } from '@eslint/eslintrc/dist/eslintrc.cjs'
-
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
+
+let FlatCompat
+try {
+  // Dinamik import ile CJS modülünü çağırıyoruz
+  const eslintrc = await import('@eslint/eslintrc')
+  FlatCompat = eslintrc.FlatCompat
+} catch {
+  const { FlatCompat: CJSFlatCompat } = await import('@eslint/eslintrc/dist/eslintrc.cjs').catch(
+    () => ({}),
+  )
+  FlatCompat = CJSFlatCompat
+}
+
+if (!FlatCompat) {
+  console.warn(
+    '⚠️ Could not import FlatCompat from @eslint/eslintrc, skipping ESLint compatibility setup.',
+  )
+}
 
 const compat = new FlatCompat({
   baseDirectory: __dirname,
