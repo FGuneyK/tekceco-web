@@ -17,7 +17,7 @@ import { Spinner } from '@/components/ui/spinner' // ✅ Yeni Spinner importu
 
 // 🌍 Ülke-şehir eşleştirmesi
 const cityOptions: Record<string, string[]> = {
-  Spain: ['Malaga', 'Alicante', 'Barcelona'],
+  Spain: ['Málaga', 'Alicante', 'Barcelona'],
   Türkiye: ['Antalya', 'Istanbul', 'Alanya'],
   'United Arab Emirates': ['Dubai', 'Abu Dhabi'],
   'North Cyprus': ['Kyrenia', 'Nicosia'],
