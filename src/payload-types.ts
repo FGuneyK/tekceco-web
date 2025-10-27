@@ -164,7 +164,7 @@ export interface User {
   password?: string | null;
 }
 /**
- * Uploaded media files (stored on Payload Cloud).
+ * Uploaded media files stored on Vercel Blob Storage.
  *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "media".

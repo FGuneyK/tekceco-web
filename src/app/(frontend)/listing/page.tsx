@@ -5,7 +5,6 @@ import { useEffect, useState } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { GroupedProperty } from '@/lib/fetchProperties'
 import PropertyCard from '@/components/PropertyCard'
-import { Input } from '@/components/ui/input'
 import {
   Select,
   SelectContent,
@@ -14,12 +13,22 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { Button } from '@/components/ui/button'
+import { Spinner } from '@/components/ui/spinner' // ✅ Yeni Spinner importu
 
-// ✅ Suspense içinde çağrılacak alt bileşen
+// 🌍 Ülke-şehir eşleştirmesi
+const cityOptions: Record<string, string[]> = {
+  Spain: ['Malaga', 'Alicante', 'Barcelona'],
+  Türkiye: ['Antalya', 'Istanbul', 'Alanya'],
+  'United Arab Emirates': ['Dubai', 'Abu Dhabi'],
+  'North Cyprus': ['Kyrenia', 'Nicosia'],
+}
+
 function ListingContent() {
   const searchParams = useSearchParams()
   const [properties, setProperties] = useState<GroupedProperty[]>([])
   const [filtered, setFiltered] = useState<GroupedProperty[]>([])
+  const [loading, setLoading] = useState(true)
+
   const [country, setCountry] = useState('all')
   const [city, setCity] = useState('')
   const [propertyType, setPropertyType] = useState('all')
@@ -39,19 +48,25 @@ function ListingContent() {
 
   useEffect(() => {
     async function load() {
-      const res = await fetch('/api/properties')
-      const data = await res.json()
-      setProperties(data)
-      setFiltered(data)
+      try {
+        setLoading(true)
+        const res = await fetch('/api/properties')
+        const data = await res.json()
+        setProperties(data)
+        setFiltered(data)
+      } finally {
+        setLoading(false)
+      }
     }
     load()
   }, [])
 
   useEffect(() => {
+    if (loading) return
     let list = [...properties]
 
     if (country !== 'all') list = list.filter((p) => p.country === country)
-    if (city.trim()) list = list.filter((p) => p.city?.toLowerCase().includes(city.toLowerCase()))
+    if (city) list = list.filter((p) => p.city === city)
     if (propertyType !== 'all') list = list.filter((p) => p.propertyType === propertyType)
 
     if (priceRange !== 'all') {
@@ -74,11 +89,12 @@ function ListingContent() {
 
     setFiltered(list)
     setCurrentPage(1)
-  }, [country, city, propertyType, priceRange, properties])
+  }, [country, city, propertyType, priceRange, properties, loading])
 
   const startIdx = (currentPage - 1) * itemsPerPage
   const paginated = filtered.slice(startIdx, startIdx + itemsPerPage)
   const totalPages = Math.ceil(filtered.length / itemsPerPage)
+  const cities = country !== 'all' ? cityOptions[country] || [] : []
 
   return (
     <main className="min-h-screen bg-background p-10">
@@ -86,11 +102,18 @@ function ListingContent() {
 
       {/* 🔍 Filtre Alanı */}
       <div className="bg-card p-6 rounded-lg shadow-md flex flex-wrap gap-4 items-center justify-between mb-8">
-        <Select onValueChange={(v) => setCountry(v)} value={country}>
-          <SelectTrigger className="w-[180px]">
+        {/* 🌍 Country */}
+        <Select
+          onValueChange={(v) => {
+            setCountry(v)
+            setCity('')
+          }}
+          value={country}
+        >
+          <SelectTrigger className="w-[180px] bg-card text-card-foreground border border-border shadow-sm hover:bg-muted/60 focus:ring-2 focus:ring-primary transition">
             <SelectValue placeholder="Country" />
           </SelectTrigger>
-          <SelectContent>
+          <SelectContent className="bg-card text-card-foreground border border-border">
             <SelectItem value="all">All Countries</SelectItem>
             <SelectItem value="Spain">Spain</SelectItem>
             <SelectItem value="Türkiye">Türkiye</SelectItem>
@@ -99,18 +122,30 @@ function ListingContent() {
           </SelectContent>
         </Select>
 
-        <Input
-          placeholder="Search by city..."
-          value={city}
-          onChange={(e) => setCity(e.target.value)}
-          className="w-[180px]"
-        />
+        {/* 🏙️ City */}
+        <Select onValueChange={setCity} value={city} disabled={country === 'all'}>
+          <SelectTrigger className="w-[180px] bg-card text-card-foreground border border-border shadow-sm hover:bg-muted/60 focus:ring-2 focus:ring-primary transition disabled:opacity-50">
+            <SelectValue placeholder={country === 'all' ? 'Select country' : 'City'} />
+          </SelectTrigger>
+          <SelectContent className="bg-card text-card-foreground border border-border">
+            {cities.length > 0 ? (
+              cities.map((cityName) => (
+                <SelectItem key={cityName} value={cityName}>
+                  {cityName}
+                </SelectItem>
+              ))
+            ) : (
+              <div className="px-2 py-1.5 text-sm text-muted-foreground">No cities available</div>
+            )}
+          </SelectContent>
+        </Select>
 
+        {/* 🏠 Property Type */}
         <Select onValueChange={(v) => setPropertyType(v)} value={propertyType}>
-          <SelectTrigger className="w-[180px]">
+          <SelectTrigger className="w-[180px] bg-card text-card-foreground border border-border shadow-sm hover:bg-muted/60 focus:ring-2 focus:ring-primary transition">
             <SelectValue placeholder="Property Type" />
           </SelectTrigger>
-          <SelectContent>
+          <SelectContent className="bg-card text-card-foreground border border-border">
             <SelectItem value="all">All Types</SelectItem>
             <SelectItem value="Apartments">Apartments</SelectItem>
             <SelectItem value="Houses">Houses</SelectItem>
@@ -119,11 +154,12 @@ function ListingContent() {
           </SelectContent>
         </Select>
 
+        {/* 💰 Price Range */}
         <Select onValueChange={(v) => setPriceRange(v)} value={priceRange}>
-          <SelectTrigger className="w-[180px]">
+          <SelectTrigger className="w-[180px] bg-card text-card-foreground border border-border shadow-sm hover:bg-muted/60 focus:ring-2 focus:ring-primary transition">
             <SelectValue placeholder="Price Range" />
           </SelectTrigger>
-          <SelectContent>
+          <SelectContent className="bg-card text-card-foreground border border-border">
             <SelectItem value="all">All</SelectItem>
             <SelectItem value="under-100k">Under €100k</SelectItem>
             <SelectItem value="100k-300k">€100k - €300k</SelectItem>
@@ -146,8 +182,12 @@ function ListingContent() {
         </Button>
       </div>
 
-      {/* 🏡 Kartlar */}
-      {paginated.length === 0 ? (
+      {/* 🌀 Spinner (fetch sırasında) */}
+      {loading ? (
+        <div className="flex justify-center items-center h-[300px]">
+          <Spinner className="text-primary size-8" />
+        </div>
+      ) : paginated.length === 0 ? (
         <p className="text-muted-foreground">No properties found.</p>
       ) : (
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
@@ -158,7 +198,7 @@ function ListingContent() {
       )}
 
       {/* 📄 Pagination */}
-      {totalPages > 1 && (
+      {!loading && totalPages > 1 && (
         <div className="flex justify-center items-center gap-2 mt-10">
           <Button
             variant="secondary"
@@ -185,7 +225,6 @@ function ListingContent() {
   )
 }
 
-// ✅ Ana bileşen Suspense içinde render edilir
 export default function ListingPage() {
   return (
     <Suspense fallback={<div className="p-10 text-muted-foreground">Loading properties...</div>}>

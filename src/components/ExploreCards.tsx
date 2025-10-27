@@ -195,7 +195,22 @@ export default function ExploreCards() {
             <Link href="/blog">
               <Button
                 variant="outline"
-                className="mt-3 text-black border-white hover:bg-white/20 transition hover:text-white"
+                className="
+    mt-3
+    border border-white/70
+    text-black
+    dark:text-white
+    dark:bg-white/10
+    dark:backdrop-blur-md
+    hover:bg-white/20
+    hover:text-white
+    dark:hover:bg-white/20
+    transition-all
+    duration-300
+    shadow-sm
+    dark:shadow-md
+    hover:shadow-lg
+  "
               >
                 Learn Latest News
                 <ArrowRight className="ml-2 h-4 w-4" />
@@ -223,7 +238,22 @@ export default function ExploreCards() {
               <Link href="/corporate">
                 <Button
                   variant="outline"
-                  className="mt-3 text-black border-white hover:bg-white/20 transition hover:text-white"
+                  className="
+    mt-3
+    border border-white/70
+    text-black
+    dark:text-white
+    dark:bg-white/10
+    dark:backdrop-blur-md
+    hover:bg-white/20
+    hover:text-white
+    dark:hover:bg-white/20
+    transition-all
+    duration-300
+    shadow-sm
+    dark:shadow-md
+    hover:shadow-lg
+  "
                 >
                   About TEKCE
                   <ArrowRight className="ml-2 h-4 w-4" />
@@ -247,7 +277,22 @@ export default function ExploreCards() {
               <Link href="/destinations">
                 <Button
                   variant="outline"
-                  className="mt-3 text-black border-white hover:bg-white/20 transition hover:text-white"
+                  className="
+    mt-3
+    border border-white/70
+    text-black
+    dark:text-white
+    dark:bg-white/10
+    dark:backdrop-blur-md
+    hover:bg-white/20
+    hover:text-white
+    dark:hover:bg-white/20
+    transition-all
+    duration-300
+    shadow-sm
+    dark:shadow-md
+    hover:shadow-lg
+  "
                 >
                   All Destinations
                   <ArrowRight className="ml-2 h-4 w-4" />
@@ -273,7 +318,22 @@ export default function ExploreCards() {
             <Link href="/listing">
               <Button
                 variant="outline"
-                className="mt-3 text-black border-white hover:bg-white/20 transition hover:text-white"
+                className="
+    mt-3
+    border border-white/70
+    text-black
+    dark:text-white
+    dark:bg-white/10
+    dark:backdrop-blur-md
+    hover:bg-white/20
+    hover:text-white
+    dark:hover:bg-white/20
+    transition-all
+    duration-300
+    shadow-sm
+    dark:shadow-md
+    hover:shadow-lg
+  "
               >
                 See All Properties
                 <ArrowRight className="ml-2 h-4 w-4" />
