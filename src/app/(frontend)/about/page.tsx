@@ -10,19 +10,19 @@ export default function AboutPage() {
     {
       name: 'Bayram TEKÇE',
       title: 'CEO, TEKCE Real Estate',
-      image: '/images/team/bayram-tekce.jpg',
+      image: '/api/media/file/bayramtekce.jpeg',
       quote: 'Sustainability is not an option. It’s our responsibility for the next generation.',
     },
     {
       name: 'Özkan TEKÇE',
       title: 'COO, TEKCE Real Estate',
-      image: '/images/team/ozkan-tekce.jpg',
+      image: '/api/media/file/ozkantekce.jpeg',
       quote: 'Innovation and eco-living must walk hand in hand for a better world.',
     },
     {
       name: 'Aysun TEKÇE',
       title: 'CMO, TEKCE Real Estate',
-      image: '/images/team/aysun-tekce.jpg',
+      image: '/api/media/file/aysuntekce.jpeg',
       quote: 'Green is not just a color. It’s the future of living and real estate.',
     },
   ]
@@ -50,7 +50,7 @@ export default function AboutPage() {
       <section className="container mx-auto py-20 grid md:grid-cols-2 gap-10 items-center">
         <div>
           <Image
-            src="/images/sustainability.jpg"
+            src="/api/media/file/aboutimage.jpg"
             alt="Sustainable architecture"
             width={600}
             height={400}
@@ -92,7 +92,7 @@ export default function AboutPage() {
               className="overflow-hidden border-border bg-card hover:shadow-xl transition-transform hover:scale-[1.02]"
             >
               <div className="relative h-64 w-full">
-                <Image src={person.image} alt={person.name} fill className="object-cover" />
+                <Image src={person.image} alt={person.name} fill className="object-contain" />
               </div>
               <CardHeader>
                 <CardTitle className="text-xl">{person.name}</CardTitle>

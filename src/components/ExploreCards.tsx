@@ -68,7 +68,7 @@ export default function ExploreCards() {
               <p className="text-white/90">
                 Learn about TEKCE and its contributions to the future.
               </p>
-              <Link href="/corporate">
+              <Link href="/about">
                 <Button
                   variant="outline"
                   className="
@@ -235,7 +235,7 @@ export default function ExploreCards() {
               <p className="text-white/90">
                 Learn about TEKCE and its contributions to the future.
               </p>
-              <Link href="/corporate">
+              <Link href="/about">
                 <Button
                   variant="outline"
                   className="

@@ -17,7 +17,19 @@ export function Header({ nav }: { nav: Nav }) {
   return (
     <header className="fixed top-0 left-0 w-full lg:px-32 z-50 backdrop-blur-md bg-background/70 shadow-sm border-b">
       <div className="container flex items-center justify-between h-16 px-4">
-        <span className="text-xl font-semibold">{nav.logoText ?? 'TEKCECO'}</span>
+        <span className="text-xl font-semibold tracking-tight">
+          {nav.logoText ? (
+            <>
+              <span className="text-blue-950 dark:text-white">{nav.logoText.slice(0, 5)}</span>
+              <span className="text-primary">{nav.logoText.slice(5)}</span>
+            </>
+          ) : (
+            <>
+              <span className="text-blue-950 dark:text-white">TEKCE</span>
+              <span className="text-primary">CO</span>
+            </>
+          )}
+        </span>
         <nav className="hidden md:flex gap-6">
           <NavigationMenu>
             <NavigationMenuList>

@@ -26,11 +26,14 @@ export function SiteFooter({ footer }: { footer: Footer }) {
   }
 
   return (
-    <footer className="border-t border-border bg-background/70 backdrop-blur-sm">
-      <div className="container max-w-6xl mx-auto py-12 px-4 md:px-8 flex flex-col md:flex-row justify-between gap-8">
+    <footer className="border-t border-border lg:px-32 bg-background/70 backdrop-blur-sm">
+      <div className="container mx-auto py-12 px-4 md:px-8 flex flex-col md:flex-row justify-between gap-8">
         {/* Left section */}
         <div className="flex flex-col gap-3 max-w-sm">
-          <span className="text-xl font-semibold tracking-tight">TEKCECO</span>
+          <span className="text-xl font-semibold tracking-tight">
+            <span className="text-blue-950 dark:text-white">TEKCE</span>
+            <span className="text-primary">CO</span>
+          </span>
           <p className="text-sm text-muted-foreground leading-relaxed">
             Sustainable Real Estate. Modern Living. Smarter Future.
           </p>
