@@ -4,12 +4,13 @@ export const Media: CollectionConfig = {
   slug: 'media',
   admin: {
     useAsTitle: 'filename',
-    description: 'Uploaded media files (stored on Payload Cloud).',
+    description: 'Uploaded media files stored on Vercel Blob Storage.',
   },
   access: {
     read: () => true,
   },
   upload: {
+    disableLocalStorage: true,
     imageSizes: [
       { name: 'thumbnail', width: 400, height: 300, position: 'centre' },
       { name: 'card', width: 800, height: 600, position: 'centre' },
@@ -17,7 +18,7 @@ export const Media: CollectionConfig = {
       { name: 'full', width: 1920, position: 'centre' },
     ],
     adminThumbnail: 'thumbnail',
-    mimeTypes: ['image/*'],
+    mimeTypes: ['image/*', 'video/*'],
   },
   fields: [
     {
