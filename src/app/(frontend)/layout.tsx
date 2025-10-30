@@ -10,21 +10,68 @@ export const revalidate = 60 // ISR: her 60 saniyede CMS’ten günceller
 
 export async function generateMetadata() {
   const settings = await getGlobal<SiteSetting>('site-settings')
+  const defaultSEO = settings?.defaultSEO
 
-  const ogImageUrl = getMediaUrl(settings?.defaultSEO?.ogImage)
+  const siteName = settings?.siteName || 'TEKCECO'
+  const baseUrl = (settings as any)?.siteUrl || 'https://tekceco.com'
+
+  const ogImageUrl = getMediaUrl(defaultSEO?.ogImage) || `${baseUrl}/og-default.jpg`
+  const defaultTitle =
+    defaultSEO?.title || 'Sustainable Real Estate. Modern Living. Smarter Future.'
+  const defaultDescription =
+    defaultSEO?.description ||
+    'Explore eco-friendly properties and sustainable investments with TEKCECO – a smarter way to live and invest.'
+
+  // 🔹 Otomatik olarak “| TEKCECO” ekleyen yardımcı fonksiyon
+  const formatTitle = (title: string) => {
+    const clean = title?.includes(siteName) ? title : `${title} | ${siteName}`
+    return clean
+  }
 
   return {
-    title: settings?.defaultSEO?.title || settings?.siteName || 'TEKCECO',
-    description:
-      settings?.defaultSEO?.description ||
-      'Sustainable Real Estate. Modern Living. Smarter Future.',
-    openGraph: {
-      title: settings?.defaultSEO?.title || settings?.siteName || 'TEKCECO',
-      description:
-        settings?.defaultSEO?.description ||
-        'Sustainable Real Estate. Modern Living. Smarter Future.',
-      images: ogImageUrl ? [ogImageUrl] : [],
+    title: {
+      default: formatTitle(defaultTitle),
+      template: `%s | ${siteName}`, // Sayfa metadata’larında otomatik olarak eklenir
     },
+    description: defaultDescription,
+
+    metadataBase: new URL(baseUrl),
+    alternates: {
+      canonical: baseUrl,
+    },
+
+    openGraph: {
+      type: 'website',
+      locale: 'en_US',
+      url: baseUrl,
+      siteName,
+      title: formatTitle(defaultTitle),
+      description: defaultDescription,
+      images: [
+        {
+          url: ogImageUrl,
+          width: 1200,
+          height: 630,
+          alt: siteName,
+        },
+      ],
+    },
+
+    twitter: {
+      card: 'summary_large_image',
+      title: formatTitle(defaultTitle),
+      description: defaultDescription,
+      images: [ogImageUrl],
+      creator: '@tekceglobal',
+    },
+
+    icons: {
+      icon: '/favicon.ico',
+      apple: '/apple-touch-icon.png',
+    },
+
+    themeColor: '#00897B',
+    manifest: '/site.webmanifest',
   }
 }
 

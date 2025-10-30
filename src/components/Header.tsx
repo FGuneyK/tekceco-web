@@ -16,7 +16,7 @@ import type { Nav } from '@/payload-types'
 export function Header({ nav }: { nav: Nav }) {
   return (
     <header className="fixed top-0 left-0 w-full lg:px-32 z-50 backdrop-blur-md bg-background/70 shadow-sm border-b">
-      <div className="container flex items-center justify-between h-16 px-4">
+      <div className="container mx-auto flex items-center justify-between h-16 px-4">
         <span className="text-xl font-semibold tracking-tight">
           {nav.logoText ? (
             <>

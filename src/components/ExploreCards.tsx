@@ -108,7 +108,7 @@ export default function ExploreCards() {
             <div className="relative z-10 text-white">
               <p className="font-bold text-2xl mb-1">Green Destinations</p>
               <p className="text-white/90">Find your next sustainable destination.</p>
-              <Link href="/destinations">
+              <Link href="/blog">
                 <Button
                   variant="outline"
                   className="
@@ -274,7 +274,7 @@ export default function ExploreCards() {
             <div className="relative z-10 text-white">
               <p className="font-bold text-lg">Green Destinations</p>
               <p className="text-white/90">Find your next sustainable destination.</p>
-              <Link href="/destinations">
+              <Link href="/blog">
                 <Button
                   variant="outline"
                   className="
