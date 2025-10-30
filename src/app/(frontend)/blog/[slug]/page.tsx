@@ -1,10 +1,18 @@
+import { Metadata } from 'next'
 import BlogPostContent from './BlogPostContent'
 
 export const revalidate = 60
 
-export async function generateMetadata({ params }: { params: { slug: string } }) {
+// ✅ Tipi düzelt: params Promise içinde geliyor olabilir.
+interface PageProps {
+  params: Promise<{ slug: string }>
+}
+
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const { slug } = await params
+
   const res = await fetch(
-    `${process.env.NEXT_PUBLIC_CMS_URL}/api/posts?where[slug][equals]=${params.slug}&depth=3`,
+    `${process.env.NEXT_PUBLIC_CMS_URL}/api/posts?where[slug][equals]=${slug}&depth=3`,
     { next: { revalidate: 60 } },
   )
 
@@ -13,15 +21,15 @@ export async function generateMetadata({ params }: { params: { slug: string } })
 
   if (!post) {
     return {
-      title: 'Post Not Found | TEKCECO Blog',
+      title: 'Post Not Found',
       description: 'The requested blog post could not be found.',
     }
   }
 
-  const title = `${post.title}`
+  const title = post.title
   const description = post.excerpt || 'Explore more about sustainable living and architecture.'
   const ogImage = post.featuredImage?.url || '/images/blog-hero.jpg'
-  const url = `https://tekceco.com/blog/${params.slug}`
+  const url = `https://tekceco.com/blog/${slug}`
 
   return {
     title,
@@ -39,9 +47,7 @@ export async function generateMetadata({ params }: { params: { slug: string } })
         },
       ],
     },
-    alternates: {
-      canonical: url,
-    },
+    alternates: { canonical: url },
   }
 }
 
@@ -56,7 +62,9 @@ async function getPost(slug: string) {
   return data?.docs?.[0] || null
 }
 
-export default async function BlogPostPage({ params }: { params: { slug: string } }) {
-  const post = await getPost(params.slug)
+// ✅ Burada da aynı şekilde params await edilerek çözülüyor.
+export default async function BlogPostPage({ params }: PageProps) {
+  const { slug } = await params
+  const post = await getPost(slug)
   return <BlogPostContent post={post} />
 }

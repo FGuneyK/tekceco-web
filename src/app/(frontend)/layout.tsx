@@ -69,8 +69,6 @@ export async function generateMetadata() {
       icon: '/favicon.ico',
       apple: '/apple-touch-icon.png',
     },
-
-    themeColor: '#00897B',
     manifest: '/site.webmanifest',
   }
 }
